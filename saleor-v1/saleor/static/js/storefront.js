@@ -6,6 +6,7 @@ import "../scss/storefront.scss";
 
 import "./components/address-form";
 import "./components/checkout";
+import "./components/wishlist";
 import "./components/footer";
 import "./components/language-picker";
 import "./components/misc";

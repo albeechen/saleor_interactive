@@ -14,6 +14,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from draftjs_sanitizer import SafeJSONEncoder
+from django.contrib import messages
 
 from ..checkout.utils import (
     get_checkout_from_request,
@@ -270,7 +271,8 @@ def product_add_to_wishlist(request, slug, product_id):
         else:
             response = product_details(request, slug, product_id, form)
     if not request.user.is_authenticated:
-        set_checkout_cookie(checkout, response)
+        messages.info(request, 'Please log in first!')
+        response = redirect("account:login")
     return response
 
 

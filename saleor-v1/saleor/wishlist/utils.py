@@ -216,8 +216,8 @@ def get_or_create_wishlist_from_request(
     """Fetch wishlist from database or create a new one based on cookie."""
     if request.user.is_authenticated:
         return get_user_wishlist(request.user, wishlist_queryset, auto_create=True)[0]
-    token = request.get_signed_cookie(COOKIE_NAME, default=None)
-    return get_or_create_anonymous_wishlist_from_token(token, wishlist_queryset)
+    
+  
 
 
 

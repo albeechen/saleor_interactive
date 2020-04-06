@@ -248,31 +248,33 @@ def product_add_to_wishlist(request, slug, product_id):
             reverse("product:details", kwargs={"product_id": product_id, "slug": slug})
         )
 
-    products = products_for_checkout(user=request.user)
-    product = get_object_or_404(products, pk=product_id)
-    wishlist = get_or_create_wishlist_from_request(request)
-    form = WishlistForm(
-        wishlist=wishlist,
-        product=product,
-        data=request.POST or None,
-        discounts=request.discounts,
-        country=request.country,
-        extensions=request.extensions,
-    )
-    if form.is_valid():
-        form.save()
-        if request.is_ajax():
-            response = JsonResponse({"next": reverse("wishlist:index")}, status=200)
-        else:
-            response = redirect("wishlist:index")
-    else:
-        if request.is_ajax():
-            response = JsonResponse({"error": form.errors}, status=400)
-        else:
-            response = product_details(request, slug, product_id, form)
     if not request.user.is_authenticated:
         messages.info(request, 'Please log in first!')
         response = redirect("account:login")
+    else:
+        products = products_for_checkout(user=request.user)
+        product = get_object_or_404(products, pk=product_id)
+        wishlist = get_or_create_wishlist_from_request(request)
+        form = WishlistForm(
+            wishlist=wishlist,
+            product=product,
+            data=request.POST or None,
+            discounts=request.discounts,
+            country=request.country,
+            extensions=request.extensions,
+        )
+        if form.is_valid():
+            form.save()
+            if request.is_ajax():
+                response = JsonResponse({"next": reverse("wishlist:index")}, status=200)
+            else:
+                response = redirect("wishlist:index")
+        else:
+            if request.is_ajax():
+                response = JsonResponse({"error": form.errors}, status=400)
+            else:
+                response = product_details(request, slug, product_id, form)
+    
     return response
 
 

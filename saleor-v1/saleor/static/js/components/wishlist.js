@@ -1,6 +1,6 @@
 import { getAjaxError } from "./misc";
 
-// Checkout quantity form
+// Wishlist quantity form
   let $checkoutLine = $(".checkout-preview-wishlist__line");
   $checkoutLine.each(function() {
     let $quantityInput = $(this).find("#id_quantity");
@@ -40,3 +40,17 @@ import { getAjaxError } from "./misc";
       });
     });
   });
+
+
+//Clear all wishlist
+
+ $(".checkout-preview-wishlist__clear").click(e => {
+    $.ajax({
+      url: $(".checkout-preview-wishlist__clear").data("action"),
+      method: "POST",
+      data: {},
+      success: response => {
+        location.reload();
+      }
+    });
+  }); 

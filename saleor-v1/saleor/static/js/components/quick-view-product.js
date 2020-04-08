@@ -15,7 +15,7 @@ export default $(document).ready(
 
 	e => {
 			
-		let pl = document.getElementsByClassName("product-list");
+		let pl = document.getElementsByClassName("product-list quick-view");
 
 		for (var i = 0; i < pl.length; i++) {	
 		  	pl[i].addEventListener("mouseover", function() {

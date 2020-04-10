@@ -44,9 +44,14 @@ from .utils.digital_products import (
     digital_content_url_is_valid,
     increment_download_count,
 )
-from .utils.variants_picker import get_variant_picker_data
+from .utils.variants_picker import (
+    get_variant_picker_data, 
+    get_search_item,
+    get_silbing_item
+)
+from .utils.availability import products_with_availability
+from ..search.backends import picker
 
-""""""
 
 def product_details(request, slug, product_id, form=None):
     """Product details page.
@@ -114,6 +119,48 @@ def product_details(request, slug, product_id, form=None):
         [v["attributes"] for v in variant_picker_data["variants"]]
     )
     json_ld_data = product_json_ld(product)
+    products = products_for_products_list(user=request.user)
+    products = list(
+        products_with_availability(
+            products,
+            discounts=request.discounts,
+            country=request.country,
+            local_currency=request.currency,
+            extensions=request.extensions,
+        )
+    )
+
+    cate_product = get_silbing_item(product.get_category_id(), request.user)
+    cate_products = list(
+        products_with_availability(
+            cate_product,
+            discounts=request.discounts,
+            country=request.country,
+            local_currency=request.currency,
+            extensions=request.extensions
+        )
+    )
+
+    serach_item = get_search_item(product.get_category_pk())
+    serach_items = list(
+        products_with_availability(
+            serach_item,
+            discounts=request.discounts,
+            country=request.country,
+            local_currency=request.currency,
+            extensions=request.extensions
+        )
+    )
+
+    for x in cate_products:
+        if(x not in serach_items):
+            if(x[0] != product):
+                serach_items.append(x)
+
+    for y in serach_items:
+       if(y[0] == product):
+            serach_items.remove(y)
+
     ctx = {
         "description_json": product.translated.description_json,
         "description_html": product.translated.description,
@@ -129,6 +176,7 @@ def product_details(request, slug, product_id, form=None):
         "json_ld_product_data": json.dumps(
             json_ld_data, default=serialize_decimal, cls=SafeJSONEncoder
         ),
+        "products": serach_items
     }
     return TemplateResponse(request, "product/details.html", ctx)
 
@@ -277,5 +325,3 @@ def product_add_to_wishlist(request, slug, product_id):
     
     return response
 
-
-    

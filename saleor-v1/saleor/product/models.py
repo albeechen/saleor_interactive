@@ -362,6 +362,12 @@ class Product(SeoModel, ModelWithMetadata, PublishableModel):
         price = calculate_discounted_price(self, self.price, discounts)
         return MoneyRange(start=price, stop=price)
 
+    def get_category_id(self):
+        return self.category_id
+
+    def get_category_pk(self):
+        return self.category.name
+
 
 class ProductTranslation(SeoModelTranslation):
     language_code = models.CharField(max_length=10)
@@ -986,9 +992,3 @@ class CollectionTranslation(SeoModelTranslation):
 
     def __str__(self):
         return self.name
-
-
-class Wishlist(models.Model):
-
-    product_name = models.CharField(max_length=120)
-

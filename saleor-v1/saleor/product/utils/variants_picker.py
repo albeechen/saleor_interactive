@@ -4,6 +4,7 @@ from typing import Dict, Iterable
 
 from django.db.models import Count, Q
 from django_prices.templatetags import prices
+from django.shortcuts import get_object_or_404
 
 from ...core.taxes import display_gross_prices
 from ...core.utils import to_local_currency
@@ -11,8 +12,10 @@ from ...discount import DiscountInfo
 from ...extensions.manager import get_extensions_manager
 from ...seo.schema.product import variant_json_ld
 from ..models import AssignedVariantAttribute, ProductVariant
-from .availability import get_product_availability
-
+from .availability import get_product_availability, products_with_availability
+from ...search.backends import picker
+from ...product.models import Category
+from ...product.utils import products_for_products_list
 
 def _attributes_to_map(instance: ProductVariant) -> Dict[str, str]:
     """Convert a variant's attributes to a flat attribute dict ({attr_pk: val_pk}).
@@ -152,3 +155,31 @@ def price_range_as_dict(price_range):
         "minPrice": price_as_dict(price_range.start),
         "maxPrice": price_as_dict(price_range.stop),
     }
+
+
+def get_search_item(category_name):
+
+    search = picker.pick_backend()
+    result = search(category_name)
+   
+    return result
+
+def get_silbing_item(category_id, user):
+
+    categories = Category.objects.prefetch_related("translations")
+    category = get_object_or_404(categories, id=category_id)
+    # Check for subcategories
+    categories = category.get_descendants(include_self=True)
+    categories_product = (
+        products_for_products_list(user=user)
+        .filter(category__in=categories)
+       .order_by("name")
+       .prefetch_related("collections")
+    )
+
+    return categories_product
+
+
+
+
+

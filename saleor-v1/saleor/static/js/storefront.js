@@ -19,4 +19,5 @@ import "./components/variant-picker";
 import "./components/description-json";
 import "./components/image-item-zoom";
 import "./components/quick-view-product";
+import "./components/recommand_items";
 

@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load get_product_image_thumbnail from product_images %}
+{% load price from taxed_prices %}
+{% load static %}
+
+{% block title %}{% trans "Your Wish List" context "Wishlist page title" %} — {{ block.super }}{% endblock %}
+
+{% block breadcrumb %}
+  <ul class="breadcrumbs list-unstyled">
+    <li><a href="{% url 'home' %}">{% trans "Home" context "Main navigation item" %}</a></li>
+    <li><a rel="nofollow" href="{% url 'wishlist:index' %}">{% trans "Wish List" context "Wishlist breadcrumb" %}</a></li>
+  </ul>
+{% endblock breadcrumb %}
+
+{% block meta_tags %}
+  <meta name="robots" content="nofollow">
+{% endblock meta_tags %}
+
+{% block content %}
+  <div class="alert alert-success remove-prodcut-alert-wishlist d-none">
+    {% trans "Product has been removed from wishlist" context "Wishlist message" %}
+    <button type="button" class="close close-msg-wishlist" aria-hidden="true">&times;</button>
+  </div>
+  <div class="checkout-preview-wishlist">
+    {% if wishlist_lines %}
+      <div class="table__header d-none d-md-block">
+        <div class="row">
+          <div class="col-md-7">
+            <small>{% trans "Product" context "Wishlist table header" %}</small>
+          </div>
+          <div class="col-md-3">
+            <small>{% trans "Delete" context "Wishlist table header" %}</small>
+          </div>
+          <div class="col-md-2 text-right">
+            <small>{% trans "Price" context "Wishlist table header" %}</small>
+          </div>
+        </div>
+      </div>
+      {% for line in wishlist_lines %}
+        <div class="checkout-preview-wishlist__line{% if forloop.last %} last{% endif %} table__row">
+          <div class="row">
+            <div class="col-7 checkout-preview__line__product">
+              <a class="link--clean" href="{{ line.variant.get_absolute_url }}">
+                <img class="lazyload lazypreload" data-src="{% get_product_image_thumbnail line.variant.get_first_image method="thumbnail" size=60 %}"
+                     data-srcset="{% get_product_image_thumbnail line.variant.get_first_image method="thumbnail" size=60 %} 1x, {% get_product_image_thumbnail line.variant.get_first_image method="thumbnail" size=120 %} 2x"
+                     alt="">
+                <p>{{ line.variant.product.translated }}<br><small>{{ line.variant.translated }}</small></p>
+              </a>
+            </div>
+            <div class="col-5">
+              <div class="row">
+                <div class="checkout-preview-wishlist__line__quantity col-md-7 col-12">
+                  <form role="form" action="{% url "wishlist:update-line" variant_id=line.variant.pk %}" method="post" class="form-wishlist">
+                    {% csrf_token %}
+                  </form>
+                  <span class="checkout-preview-wishlist-item-delete">
+                    <svg data-src="{% static "images/delete.svg" %}" height="20px" width="20px" />
+                  </span>
+                  <small class="checkout-preview-wishlist__line__quantity-error text-danger"></small>
+                </div>
+                <div class="checkout-preview-item-price-wishlist col-md-5 col-12" data-product-id="{{ line.variant.pk }}">
+                  <p class="text-right">
+                    {% price line.get_price %}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      <div class="row">
+        <div class="col-md-12">
+            <button class="btn secondary float-right checkout-preview-wishlist__clear" data-action="{% url 'wishlist:clear' %}">
+            {% trans "Clear wish list" context "wishlist page: secondary action, empty the wishlist" %}
+          </button>
+        </div>
+      </div>
+    {% else %}
+      <div class="checkout-preview__empty">
+        <h2>{% trans "There are no products in your wish list." context "Empty wishlist message" %}</h2>
+      </div>
+    {% endif %}
+  </div>
+{% endblock content %}

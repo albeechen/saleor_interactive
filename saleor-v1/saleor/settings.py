@@ -53,21 +53,10 @@ if REDIS_URL:
     CACHE_URL = os.environ.setdefault("CACHE_URL", REDIS_URL)
 CACHES = {"default": django_cache_url.config()}
 
-#DATABASES = {
- #   "default": dj_database_url.config(
-#        default="postgres://saleor:saleor@localhost:5432/saleor", conn_max_age=600
-#    )
-#}
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'saleor',
-        'USER': 'Albee.C',
-        'PASSWORD': 'albeec',
-        'HOST': 'localhost',
-        'PORT': 5432,
-    }
+   "default": dj_database_url.config(
+        default="postgres://Albee.C:albeec@localhost:5432/saleor", conn_max_age=600
+   )
 }
 
 TIME_ZONE = "America/Chicago"
@@ -210,8 +199,8 @@ TEMPLATES = [
 ]
 
 # Make this unique, and don't share it with anybody.
-#SECRET_KEY = os.environ.get("SECRET_KEY")
-SECRET_KEY = 'AABBCC'
+SECRET_KEY = os.environ.get("SECRET_KEY")
+
 
 MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",

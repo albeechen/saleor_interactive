@@ -9,9 +9,10 @@ Additional, I implemented several features in this repository.
   - Share to Social Media
   - Wish List
   
-![Image of Recommended_system](https://github.com/albeec/saleor-v1/blob/master/saleor-v1/media/github-introduction/Recommended_system.png){:height="50%" width="50%"}
 
-![Image of Zoom image](https://github.com/albeec/saleor-v1/blob/master/saleor-v1/media/github-introduction/Zoom%20image.png){:height="50%" width="50%"}
+<img src="https://github.com/albeec/saleor-v1/blob/master/saleor-v1/media/github-introduction/Recommended_system.png" width="50%" height="50%">
+
+<img src="https://github.com/albeec/saleor-v1/blob/master/saleor-v1/media/github-introduction/Zoom%20image.png" width="50%" height="50%">
 
 ## License
 

@@ -10,9 +10,7 @@ Additional, I implemented several features in this repository.
   - Wish List
   
 
-<img src="https://github.com/albeec/saleor-v1/blob/master/saleor-v1/media/github-introduction/Recommended_system.png" width="50%" height="50%">
-
-<img src="https://github.com/albeec/saleor-v1/blob/master/saleor-v1/media/github-introduction/Zoom%20image.png" width="50%" height="50%">
+<img src="https://github.com/albeec/saleor-v1/blob/master/saleor-v1/media/github-introduction/introde%20functions.png" width="70%" height="50%">
 
 ## License
 
